@@ -1,0 +1,1784 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>北海道十月自驾行程</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      --bg: #f7f9f6;
+      --paper: #ffffff;
+      --ink: #17211d;
+      --muted: #5c6a63;
+      --soft: #e6ede6;
+      --line: #d6dfd7;
+      --green: #2f6f4e;
+      --green-dark: #18462f;
+      --blue: #246a86;
+      --amber: #c97918;
+      --amber-soft: #fff1dc;
+      --danger: #b8422a;
+      --shadow: 0 16px 44px rgba(23, 33, 29, 0.12);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.62;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    svg {
+      flex: 0 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(214, 223, 215, 0.9);
+      background: rgba(247, 249, 246, 0.92);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-dark);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      color: var(--green);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      color: inherit;
+      flex: 0 0 auto;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--green-dark);
+    }
+
+    .hero {
+      min-height: 560px;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(90deg, rgba(10, 20, 15, 0.78) 0%, rgba(10, 20, 15, 0.42) 43%, rgba(10, 20, 15, 0.04) 76%),
+        url("assets/hokkaido-autumn-road.png") center / cover no-repeat;
+      color: #fff;
+    }
+
+    .hero-inner {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 92px 0 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.64fr);
+      gap: 56px;
+      align-items: end;
+    }
+
+    .hero h1 {
+      margin: 0 0 18px;
+      max-width: 720px;
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.46;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .action {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 6px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      background: rgba(255, 255, 255, 0.13);
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .action.primary {
+      background: #fff;
+      color: var(--green-dark);
+      border-color: #fff;
+    }
+
+    .hero-facts {
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .fact-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .fact {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .fact svg {
+      color: var(--green);
+      margin-top: 2px;
+    }
+
+    .fact strong {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    main {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 30px 0 64px;
+    }
+
+    .alert {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 18px;
+      align-items: start;
+      margin: -8px 0 30px;
+      padding: 20px 22px;
+      background: var(--amber-soft);
+      border: 1px solid #efc887;
+      border-radius: var(--radius);
+    }
+
+    .alert svg {
+      color: var(--amber);
+    }
+
+    .alert h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .alert p {
+      margin: 0;
+      color: #65441c;
+    }
+
+    .section {
+      margin-top: 42px;
+      scroll-margin-top: 86px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--green-dark);
+      font-size: clamp(25px, 3vw, 36px);
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      max-width: 540px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .route-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .route-stop {
+      min-height: 84px;
+      padding: 16px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .route-stop:last-child {
+      border-right: 0;
+    }
+
+    .route-stop span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .route-stop strong {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .map-panel,
+    .map-legend {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.06);
+    }
+
+    .map-panel {
+      height: 560px;
+      min-height: 460px;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .real-route-map {
+      width: 100%;
+      height: 100%;
+      min-height: 460px;
+      background: #eaf1eb;
+    }
+
+    .leaflet-container {
+      font-family: inherit;
+      color: var(--ink);
+    }
+
+    .map-marker-shell {
+      background: transparent;
+      border: 0;
+    }
+
+    .map-marker {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(23, 33, 29, 0.24);
+    }
+
+    .map-marker.kai {
+      background: var(--amber);
+    }
+
+    .map-status {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 500;
+      max-width: calc(100% - 24px);
+      padding: 8px 10px;
+      border: 1px solid rgba(214, 223, 215, 0.9);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      box-shadow: 0 8px 20px rgba(23, 33, 29, 0.12);
+    }
+
+    .map-legend {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .map-legend h3 {
+      margin: 0;
+      color: var(--green-dark);
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .map-legend p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .map-legs {
+      display: grid;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .map-leg {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .map-leg:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .map-leg b {
+      width: 26px;
+      height: 26px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .map-leg strong {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .map-leg span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .route-leg-meta {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      margin-top: 6px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #eef5ef;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .route-link-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .route-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f7faf7;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .route-link:hover {
+      background: #eef5ef;
+    }
+
+    .map-source-note {
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.06);
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef5ef;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .day {
+      color: var(--green-dark);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .date {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .place {
+      color: var(--ink);
+      font-weight: 720;
+    }
+
+    .drive {
+      color: var(--blue);
+      white-space: nowrap;
+      font-weight: 680;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #edf5f6;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.rest {
+      background: #eef6ed;
+      color: var(--green);
+    }
+
+    .tag.warn {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.05);
+    }
+
+    .panel h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--green-dark);
+      font-size: 20px;
+      line-height: 1.28;
+    }
+
+    .panel h3 svg {
+      color: var(--green);
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 11px;
+      color: var(--muted);
+    }
+
+    .list li {
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.74em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+      margin-top: 3px;
+    }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .momiji-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .food-item {
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .food-item strong {
+      color: var(--green-dark);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .food-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .momiji-item {
+      min-height: 164px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.05);
+    }
+
+    .momiji-item small {
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .momiji-item strong {
+      color: var(--green-dark);
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .momiji-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .flight-card {
+      min-height: 176px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+      padding: 20px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.05);
+    }
+
+    .flight-card small {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flight-card strong {
+      color: var(--green-dark);
+      font-size: 18px;
+      line-height: 1.28;
+    }
+
+    .flight-card span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .source svg {
+      color: var(--blue);
+      margin-top: 2px;
+    }
+
+    .source strong {
+      display: block;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .source span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .update-log {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .update-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .update-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .footer {
+      margin-top: 48px;
+      padding: 22px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 960px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 12px 0;
+        gap: 10px;
+      }
+
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding-top: 72px;
+      }
+
+      .hero-facts {
+        max-width: 560px;
+      }
+
+      .section-head {
+        display: grid;
+        gap: 8px;
+      }
+
+      .route-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .route-stop {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .map-panel {
+        height: 360px;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .real-route-map {
+        min-height: 0;
+      }
+
+      .two-col,
+      .check-grid,
+      .map-layout,
+      .momiji-grid,
+      .flight-grid,
+      .food-grid,
+      .source-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav,
+      main,
+      .hero-inner {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .hero-copy {
+        font-size: 18px;
+      }
+
+      .alert {
+        grid-template-columns: 1fr;
+      }
+
+      .route-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .update-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+        font-size: 12px;
+      }
+
+      .site-header,
+      .hero-actions {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        color: #000;
+        background: #fff;
+        border-bottom: 2px solid #000;
+      }
+
+      .hero-inner {
+        display: block;
+        width: 100%;
+        padding: 0 0 12px;
+      }
+
+      .hero h1 {
+        color: #000;
+        font-size: 32px;
+      }
+
+      .hero-copy {
+        color: #000;
+        font-size: 14px;
+      }
+
+      .hero-facts,
+      .panel,
+      .table-wrap,
+      .food-item,
+      .source,
+      .alert {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      main {
+        width: 100%;
+        padding: 16px 0;
+      }
+
+      th {
+        position: static;
+      }
+
+      table {
+        min-width: 0;
+        font-size: 11px;
+      }
+
+      th,
+      td {
+        padding: 7px;
+      }
+
+      a {
+        color: #000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="页面导航">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 18.5 9 6l4.1 8.2L16 10l4 8.5H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9 6 11.5 18.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span>北海道家庭自驾计划</span>
+      </div>
+      <div class="nav-links">
+        <a href="#flights">航班</a>
+        <a href="#route">路线</a>
+        <a href="#route-map">地图</a>
+        <a href="#momiji">赏枫</a>
+        <a href="#daily">每日行程</a>
+        <a href="#comfort">孕妇与长辈</a>
+        <a href="#checklists">清单</a>
+        <a href="#sources">来源</a>
+        <a href="#updates">更新记录</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero" aria-label="北海道十月自驾行程封面">
+    <div class="hero-inner">
+      <div>
+        <h1>北海道十月<span class="nowrap">自驾行程</span></h1>
+        <p class="hero-copy">上海出发，夫妻二人带父母，两周慢游。路线避开小樽，改为少换酒店版，优先舒适车程、医疗可达、红叶窗口和山路安全。</p>
+        <div class="hero-actions">
+          <a class="action primary" href="#daily">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 3v4M16 3v4M4 9h16M5 5h14v15H5V5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            查看每日安排
+          </a>
+          <a class="action" href="#checklists">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 11 11 13 15.5 8.5M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            预订清单
+          </a>
+        </div>
+      </div>
+
+      <aside class="hero-facts" aria-label="行程摘要">
+        <div class="fact-grid">
+          <div class="fact">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 3v4M16 3v4M4 9h16M5 5h14v15H5V5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><strong>建议时间</strong>2026-10-07 周三 至 2026-10-20 周二。为保证 10/16 晚入住界 ポロト，整体后移一天。</div>
+          </div>
+          <div class="fact">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.2" stroke="currentColor" stroke-width="1.7"/>
+            </svg>
+            <div><strong>路线方向</strong>新千岁进出，旭川/美瑛连住，札幌连住，登别后 10/16 晚住界 ポロト，再顺路南下函馆。</div>
+          </div>
+          <div class="fact">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 11 21 4l-7 17-3-7-8-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+            <div><strong>航班路线</strong>上海浦东 PVG ⇄ 新千岁 CTS。直飞优先；转机备选东京或首尔。</div>
+          </div>
+          <div class="fact">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 16h14l-1.5-4.5A2.2 2.2 0 0 0 15.4 10H8.6a2.2 2.2 0 0 0-2.1 1.5L5 16ZM7 16v3M17 16v3M8 19h0M16 19h0M9 10l1.2-4h3.6L15 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><strong>推荐车型</strong>7 座 MPV，优先第二排独立座、后备箱空间和冬胎可用性。</div>
+          </div>
+          <div class="fact">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M12 5v14M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <div><strong>节奏原则</strong>全程 7 处住宿，10/16 晚界温泉酒店顺路嵌入；最长函馆回千岁拆休息点。</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <main>
+    <section class="alert" aria-label="重要提醒">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 4 2.8 20h18.4L12 4Z" fill="currentColor" opacity="0.16"/>
+        <path d="M12 4 2.8 20h18.4L12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M12 9v5M12 17.2h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h2>自驾证件已具备，山路仍需每日确认</h2>
+        <p>你们已说明持有美国驾照和 IDP，适合作为日本自驾组合。出发前仍需确认美国驾照、IDP 和护照姓名一致且覆盖全程有效，并随身携带原件。10 月北海道山区可能降雪或结冰，旭岳、层云峡、定山溪、洞爷一带每天出发前查天气与路况。</p>
+      </div>
+    </section>
+
+    <section class="section" id="flights">
+      <div class="section-head">
+        <h2>上海往返航班路线</h2>
+        <p class="section-note">优先买同一机场进出：上海浦东 PVG 往返新千岁 CTS。航班号和时刻不要提前写死，订票时以航司和机场实时班期为准。</p>
+      </div>
+      <div class="flight-grid">
+        <div class="flight-card">
+          <small>Day 1 去程优先方案</small>
+          <strong>上海浦东 PVG → 新千岁 CTS</strong>
+          <span>直飞优先。落地后只取车、短途开到千岁/机场酒店，不接长途驾驶。</span>
+        </div>
+        <div class="flight-card">
+          <small>转机备选</small>
+          <strong>PVG → 东京 HND/NRT 或首尔 ICN → CTS</strong>
+          <span>若直飞班期或价格不合适，优先同一张票转机，预留 2.5-3 小时以上中转时间。</span>
+        </div>
+        <div class="flight-card">
+          <small>Day 14 返程优先方案</small>
+          <strong>新千岁 CTS → 上海浦东 PVG</strong>
+          <span>返程当天只做还车、机场购物和飞回上海；Day 13 已提前住回千岁/苫小牧，避免赶国际航班。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="route">
+      <div class="section-head">
+        <h2>路线概览</h2>
+        <p class="section-note">少换酒店版基础上，特别加入 10/16 晚星野集团「界 ポロト」。现在把出发日后移到 10/7，让 10/16 正好落在札幌南下登别/白老、再去函馆的顺路段。小樽已排除。</p>
+      </div>
+      <div class="route-strip" aria-label="路线站点">
+        <div class="route-stop"><span>Day 1</span><strong>千岁/机场<br>1 晚</strong></div>
+        <div class="route-stop"><span>Day 2-5</span><strong>旭川/美瑛<br>4 晚基地</strong></div>
+        <div class="route-stop"><span>Day 6-8</span><strong>札幌<br>3 晚基地</strong></div>
+        <div class="route-stop"><span>Day 9</span><strong>登别<br>1 晚温泉</strong></div>
+        <div class="route-stop"><span>Day 10</span><strong>界 ポロト<br>10/16 晚</strong></div>
+        <div class="route-stop"><span>Day 11-12</span><strong>函馆<br>2 晚</strong></div>
+        <div class="route-stop"><span>Day 13-14</span><strong>千岁/苫小牧<br>返程</strong></div>
+      </div>
+    </section>
+
+    <section class="section" id="route-map">
+      <div class="section-head">
+        <h2>路线地图</h2>
+        <p class="section-note">使用 OpenStreetMap 真实底图和 OSRM 驾车路线计算；每天出发仍以 Google Maps、车机导航、天气、路况和身体状态为准。</p>
+      </div>
+      <div class="map-layout">
+        <div class="map-panel">
+          <div id="real-route-map" class="real-route-map" role="img" aria-label="北海道十月自驾真实驾车路线地图"></div>
+          <div class="map-status" id="map-status">正在加载真实底图与 OSRM 驾车路线...</div>
+        </div>
+
+        <aside class="map-legend" aria-label="真实驾车路线说明">
+          <h3>真实驾车路线</h3>
+          <p id="map-summary">OSRM 估算：约 911 公里，纯驾驶约 12小时09分。</p>
+          <div class="map-legs">
+            <div class="map-leg"><b>1</b><div><strong>新千岁机场 → 旭川/美瑛</strong><span>Day 1-2：抵达后可先住机场圈，第二天北上旭川基地。</span><em class="route-leg-meta" data-leg-meta="0">约 147 km / 2小时10分</em></div></div>
+            <div class="map-leg"><b>2</b><div><strong>旭川/美瑛 → 札幌</strong><span>Day 6：结束北部赏枫后回到城市基地，减少父母和孕期疲劳。</span><em class="route-leg-meta" data-leg-meta="1">约 130 km / 1小时49分</em></div></div>
+            <div class="map-leg"><b>3</b><div><strong>札幌 → 登别温泉</strong><span>Day 9：南下可顺路看洞爷湖，再住登别温泉。</span><em class="route-leg-meta" data-leg-meta="2">约 110 km / 1小时29分</em></div></div>
+            <div class="map-leg"><b>4</b><div><strong>登别温泉 → 白老・界 ポロト</strong><span>Day 10：10/16 晚入住界，车程短，把酒店本身作为目的地。</span><em class="route-leg-meta" data-leg-meta="3">约 28 km / 26分</em></div></div>
+            <div class="map-leg"><b>5</b><div><strong>白老・界 ポロト → 函馆</strong><span>Day 11：经大沼公园到函馆，连住 2 晚。</span><em class="route-leg-meta" data-leg-meta="4">约 225 km / 2小时48分</em></div></div>
+            <div class="map-leg"><b>6</b><div><strong>函馆 → 苫小牧/千岁</strong><span>Day 13：返程前一晚回机场圈，避免 Day 14 赶路。</span><em class="route-leg-meta" data-leg-meta="5">约 248 km / 3小时04分</em></div></div>
+            <div class="map-leg"><b>7</b><div><strong>苫小牧/千岁 → 新千岁机场</strong><span>Day 14：短途还车后从 CTS 飞回上海浦东 PVG。</span><em class="route-leg-meta" data-leg-meta="6">约 24 km / 24分</em></div></div>
+          </div>
+          <div class="route-link-grid">
+            <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=New+Chitose+Airport&destination=New+Chitose+Airport&travelmode=driving&waypoints=Asahikawa+Station%7CSapporo+Station%7CNoboribetsu+Onsen%7CKAI+Poroto%7CHakodate+Station%7CTomakomai+Station" target="_blank" rel="noreferrer">Google Maps 打开整条路线</a>
+            <a class="route-link" href="https://www.openstreetmap.org/directions?engine=fossgis_osrm_car&route=42.7868%2C141.6830%3B41.7743%2C140.7262" target="_blank" rel="noreferrer">OpenStreetMap 查看道路底图</a>
+          </div>
+          <p class="map-source-note">底图 © OpenStreetMap contributors；绿色折线由 OSRM 公共服务按道路计算。导航、收费、临时封路和冬季路况以当天实际导航为准。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="momiji">
+      <div class="section-head">
+        <h2>赏枫主线</h2>
+        <p class="section-note">10 月北海道红叶通常从大雪山等高海拔区域开始，再往札幌近郊、温泉地和道南推进。当前路线按“北部山地到道南湖泊”串起来，不额外增加长途绕路。</p>
+      </div>
+      <div class="momiji-grid">
+        <div class="momiji-item">
+          <small>Day 3-4</small>
+          <strong>美瑛白金・旭岳</strong>
+          <span>青池、白须瀑布、旭岳缆车。高海拔红叶早，天气好就优先执行，天气差则降级。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 5</small>
+          <strong>层云峡・黑岳</strong>
+          <span>黑岳缆车、银河瀑布、流星瀑布。10 月上旬适合看峡谷红叶和山景。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 8</small>
+          <strong>定山溪・丰平峡</strong>
+          <span>札幌日归，不换酒店。二见吊桥、温泉街和丰平峡水坝是中旬赏枫重点。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 9-10</small>
+          <strong>洞爷・登别・白老</strong>
+          <span>札幌南下时顺路看洞爷湖和登别温泉地秋色，10/16 晚住界 ポロト湖畔温泉。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 11-12</small>
+          <strong>大沼公园・函馆</strong>
+          <span>从白老顺路去函馆，途中按体力选择大沼公园；函馆市内以五棱郭、元町和夜景轻松收尾。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="daily">
+      <div class="section-head">
+        <h2>14 天每日行程</h2>
+        <p class="section-note">车程为规划估算，实际以天气、路况和当天身体状态为准。孕妇不舒服时，优先删景点、不删休息。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>天数</th>
+              <th>日期</th>
+              <th>住宿</th>
+              <th>路线与安排</th>
+              <th>驾驶</th>
+              <th>节奏</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day">Day 1</td>
+              <td class="date">10/07 周三</td>
+              <td class="place">千岁/机场</td>
+              <td>上海浦东 PVG 飞新千岁 CTS。直飞优先；落地后取车、熟悉右舵和左侧通行，晚餐后早休息。</td>
+              <td class="drive">约 15-30 分钟</td>
+              <td><span class="tag rest">抵达日</span></td>
+              <td>不要第一天长途开车。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 2</td>
+              <td class="date">10/08 周四</td>
+              <td class="place">旭川/美瑛</td>
+              <td>千岁出发前往旭川/美瑛基地。到得早可顺路轻看富良野，晚餐和补给在旭川更方便。</td>
+              <td class="drive">约 2.5-3.2 小时</td>
+              <td><span class="tag">移动日</span></td>
+              <td>这里连住 4 晚；更省心选旭川市区，更田园选美瑛。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 3</td>
+              <td class="date">10/09 周五</td>
+              <td class="place">旭川/美瑛</td>
+              <td>美瑛拼布之路、青池、白须瀑布、四季彩之丘。以停车点和短步行为主，作为第一段红叶预热。</td>
+              <td class="drive">约 1.5-2 小时</td>
+              <td><span class="tag rest">慢游日</span></td>
+              <td>青池、白须瀑布是当天红叶重点；早去人少且好停车。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 4</td>
+              <td class="date">10/10 周六</td>
+              <td class="place">旭川/美瑛</td>
+              <td>从基地日归旭岳。天气好坐旭岳缆车看大雪山红叶，姿见池附近短线即可，下午回同一酒店。</td>
+              <td class="drive">约 2.5-3 小时往返</td>
+              <td><span class="tag warn">山路日</span></td>
+              <td>不登山；风大、降雪或能见度差则改东川/旭川室内安排。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 5</td>
+              <td class="date">10/11 周日</td>
+              <td class="place">旭川/美瑛</td>
+              <td>从基地日归层云峡。黑岳缆车或银河/流星瀑布二选一，看峡谷红叶后回旭川/美瑛休息。</td>
+              <td class="drive">约 3-3.5 小时往返</td>
+              <td><span class="tag warn">山路日</span></td>
+              <td>如果当天山路天气差，直接改旭山动物园或旭川市区。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 6</td>
+              <td class="date">10/12 周一</td>
+              <td class="place">札幌</td>
+              <td>旭川/美瑛退房后开往札幌。下午北海道大学、大通公园或酒店附近轻松散步。</td>
+              <td class="drive">约 2-2.5 小时</td>
+              <td><span class="tag">移动日</span></td>
+              <td>札幌连住 3 晚，选带停车场、靠地铁或主干道的酒店。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 7</td>
+              <td class="date">10/13 周二</td>
+              <td class="place">札幌</td>
+              <td>北海道大学、圆山公园/北海道神宫、大通公园。市内银杏和公园秋色作为轻松休整。</td>
+              <td class="drive">市内短途</td>
+              <td><span class="tag rest">休整日</span></td>
+              <td>可改为不开车，地铁和出租车组合。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 8</td>
+              <td class="date">10/14 周三</td>
+              <td class="place">札幌</td>
+              <td>从札幌日归定山溪赏枫。二见吊桥、温泉街散步；丰平峡水坝视天气和体力选择。</td>
+              <td class="drive">约 2 小时往返</td>
+              <td><span class="tag rest">日归温泉</span></td>
+              <td>不换酒店；若累了就改成札幌市内休整。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 9</td>
+              <td class="date">10/15 周四</td>
+              <td class="place">登别</td>
+              <td>札幌退房，经洞爷湖/昭和新山/有珠山一带慢慢南下，看湖畔秋色后到登别温泉。</td>
+              <td class="drive">约 3 小时</td>
+              <td><span class="tag warn">移动日</span></td>
+              <td>登别住 1 晚；洞爷作为顺路游，不单独换酒店。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 10</td>
+              <td class="date">10/16 周五</td>
+              <td class="place">白老・界 ポロト</td>
+              <td>上午登别地狱谷栈道短线，午后短途前往白老「界 ポロト」入住。下午留给湖畔、温泉和酒店晚餐。</td>
+              <td class="drive">约 40-60 分钟</td>
+              <td><span class="tag rest">界温泉</span></td>
+              <td>这天少排景点，把界温泉酒店本身当作目的地。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 11</td>
+              <td class="date">10/17 周六</td>
+              <td class="place">函馆</td>
+              <td>白老退房，经大沼公园赏枫到函馆。下午入住，晚餐轻松，不赶夜景。</td>
+              <td class="drive">约 3.5 小时</td>
+              <td><span class="tag">长途日</span></td>
+              <td>函馆连住 2 晚；分 2-3 次停车休息。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 12</td>
+              <td class="date">10/18 周日</td>
+              <td class="place">函馆</td>
+              <td>五棱郭塔、元町、红砖仓库。若大沼前一天没去，可上午补大沼；天气好再上函馆山看夜景。</td>
+              <td class="drive">市内短途</td>
+              <td><span class="tag rest">慢游日</span></td>
+              <td>朝市以熟食为主，孕期避开生食。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 13</td>
+              <td class="date">10/19 周一</td>
+              <td class="place">千岁/苫小牧</td>
+              <td>函馆回千岁或苫小牧。中途可在八云、洞爷、有珠山服务区分段休息。</td>
+              <td class="drive">约 4-4.5 小时</td>
+              <td><span class="tag">最长驾驶</span></td>
+              <td>不要同日接国际航班；这天只做返程移动。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 14</td>
+              <td class="date">10/20 周二</td>
+              <td class="place">返程</td>
+              <td>新千岁 CTS 还车，机场购物和午餐，飞回上海浦东 PVG。</td>
+              <td class="drive">约 15-45 分钟</td>
+              <td><span class="tag rest">返程日</span></td>
+              <td>还车前加满油，预留排队和行李时间。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section two-col" id="comfort">
+      <div class="panel">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s-7-4.7-7-10.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 16.3 12 21 12 21Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          孕妇与长辈舒适原则
+        </h3>
+        <ul class="list">
+          <li>住宿以连住为核心，只为 10/16 晚界温泉酒店增加一次短距离移动：旭川/美瑛 4 晚、札幌 3 晚、登别 1 晚、界 ポロト 1 晚、函馆 2 晚。</li>
+          <li>车程每 60-90 分钟下车走动、补水、上洗手间。</li>
+          <li>安全带肩带过胸，腰带放在腹部下方髋部位置。</li>
+          <li>温泉短时间、低温、有人陪；身体不适当天取消。</li>
+          <li>餐饮避开生鱼片、生贝、半熟蛋和未熟肉类。</li>
+          <li>记录附近医院、产科或综合医院位置，山区日尤其重要。</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 14h16M6 14l2-6h8l2 6M7 14v4M17 14v4M8 18h0M16 18h0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          自驾执行原则
+        </h3>
+        <ul class="list">
+          <li>租 7 座 MPV，优先后排舒适、行李空间、倒车影像和冬胎。</li>
+          <li>办理 ETC 卡；高速为主，山路尽量安排白天通过。</li>
+          <li>每天出发前查日本气象厅、道路交通情报和 Northern Road Navi。</li>
+          <li>旭岳、层云峡、定山溪、洞爷附近遇雪或雾，直接降级行程。</li>
+          <li>酒店优先选择免费停车、晚餐可在馆内解决、房间离电梯近。</li>
+          <li>车内常备水、零食、毛毯、塑料袋、纸巾、常用药和充电线。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="checklists">
+      <div class="section-head">
+        <h2>预订与准备清单</h2>
+        <p class="section-note">勾选状态会保存在当前浏览器。之后补酒店名、餐厅名和航班号时，直接在这个区域更新。</p>
+      </div>
+      <div class="check-grid">
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 20V7l7-4 7 4v13H5ZM9 20v-7h6v7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            酒店
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="hotel-chitose">千岁/机场 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="hotel-asahikawa-biei">旭川/美瑛 4 晚</label>
+            <label class="check"><input type="checkbox" data-check="hotel-sapporo">札幌 3 晚</label>
+            <label class="check"><input type="checkbox" data-check="hotel-noboribetsu">登别温泉 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="hotel-kai-poroto">白老・界 ポロト 1 晚（10/16）</label>
+            <label class="check"><input type="checkbox" data-check="hotel-hakodate">函馆 2 晚</label>
+            <label class="check"><input type="checkbox" data-check="hotel-return">千岁/苫小牧 1 晚</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 11 21 4l-7 17-3-7-8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            航班
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="flight-outbound">Day 1 PVG → CTS 去程航班</label>
+            <label class="check"><input type="checkbox" data-check="flight-return">Day 14 CTS → PVG 返程航班</label>
+            <label class="check"><input type="checkbox" data-check="flight-direct">优先确认直飞班期和价格</label>
+            <label class="check"><input type="checkbox" data-check="flight-transfer">若转机，预留 2.5-3 小时以上</label>
+            <label class="check"><input type="checkbox" data-check="flight-baggage">核对托运行李、孕期乘机文件和座位</label>
+            <label class="check"><input type="checkbox" data-check="flight-arrival">Day 1 抵达后只短途开到千岁/机场酒店</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 16h14l-1.5-4.5A2.2 2.2 0 0 0 15.4 10H8.6a2.2 2.2 0 0 0-2.1 1.5L5 16ZM7 16v3M17 16v3M8 19h0M16 19h0M9 10l1.2-4h3.6L15 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            租车与证件
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="car-license">确认美国驾照全程有效</label>
+            <label class="check"><input type="checkbox" data-check="car-idp">确认 IDP 全程有效且姓名一致</label>
+            <label class="check"><input type="checkbox" data-check="car-documents">随身携带美国驾照、IDP、护照原件</label>
+            <label class="check"><input type="checkbox" data-check="car-mpv">预订 7 座 MPV，确认行李空间</label>
+            <label class="check"><input type="checkbox" data-check="car-winter-tires">确认 10 月山路可配冬胎</label>
+            <label class="check"><input type="checkbox" data-check="car-etc">加租 ETC 卡或高速通行方案</label>
+            <label class="check"><input type="checkbox" data-check="car-parking">核对每晚酒店停车费用和限高</label>
+            <label class="check"><input type="checkbox" data-check="car-insurance">选择免赔补偿和道路救援</label>
+            <label class="check"><input type="checkbox" data-check="car-map">离线地图、电话卡/漫游、车载充电器</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 3v8M11 3v8M9 11v10M16 3c1.8 1.2 2.8 3 2.8 5.2S17.7 12 16 13v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            健康与行李
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="health-doctor">孕期出行前咨询产检医生</label>
+            <label class="check"><input type="checkbox" data-check="health-insurance">购买覆盖孕期与自驾的旅行保险</label>
+            <label class="check"><input type="checkbox" data-check="health-hospitals">保存沿途医院和急救电话</label>
+            <label class="check"><input type="checkbox" data-check="health-meds">常用药、产检资料、保温杯</label>
+            <label class="check"><input type="checkbox" data-check="health-clothes">防风外套、围巾、帽子、舒适鞋</label>
+            <label class="check"><input type="checkbox" data-check="health-food">车内零食、水、垃圾袋、湿巾</label>
+            <label class="check"><input type="checkbox" data-check="health-onsen">确认温泉私汤/家族汤和禁忌提示</label>
+            <label class="check"><input type="checkbox" data-check="health-schedule">每天留出午休或提前回酒店时间</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>餐饮方向</h2>
+        <p class="section-note">以熟食、热汤、可预约和不排长队为优先。孕期不追求“必须吃到某家”。</p>
+      </div>
+      <div class="food-grid">
+        <div class="food-item">
+          <strong>札幌</strong>
+          <span>汤咖喱、拉面、熟食海鲜、百货地下熟食。适合安排一顿轻松晚餐。</span>
+        </div>
+        <div class="food-item">
+          <strong>美瑛/富良野</strong>
+          <span>咖啡馆、洋食、奶制品、炖菜。景点间别空腹赶路。</span>
+        </div>
+        <div class="food-item">
+          <strong>温泉地</strong>
+          <span>优先订一泊二食，减少夜间找餐厅和停车压力。</span>
+        </div>
+        <div class="food-item">
+          <strong>函馆</strong>
+          <span>朝市可吃熟螃蟹、烤物、定食；孕期避开生鱼、生贝和半熟蛋。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="section-head">
+        <h2>官方信息来源</h2>
+        <p class="section-note">出发前再核一次航班、租车、天气、路况和景区开放。这个区后续会继续补餐厅、酒店和地图链接。</p>
+      </div>
+      <div class="source-list">
+        <a class="source" href="https://www.npa.go.jp/english/bureau/traffic/r8_english.pdf.pdf" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3 5 6v5c0 4.5 2.8 8.4 7 10 4.2-1.6 7-5.5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>日本警察厅：外国驾照规则</strong>确认 IDP、日译件和可驾驶条件。</span>
+        </a>
+        <a class="source" href="https://visit-hokkaido.org/planyourtrip/modelcourse/autumn01/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 6c4-2 8 2 16 0v12c-8 2-12-2-16 0V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>北海道官方旅游：秋季路线</strong>参考红叶和秋季目的地节奏。</span>
+        </a>
+        <a class="source" href="https://www.visit-hokkaido.jp/en/feature/kouyou" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3c3.5 3 5 5.8 5 8.4A5 5 0 0 1 7 11.4C7 8.8 8.5 6 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M12 13v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>北海道官方旅游：赏枫特集</strong>覆盖定山溪、洞爷、登别、大沼、层云峡、旭岳、美瑛等红叶点。</span>
+        </a>
+        <a class="source" href="https://asahidake.hokkaido.jp/en/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 19 9 6l4 8 3-5 5 10H3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>旭岳缆车与山况</strong>查开放、风速、能见度和天气。</span>
+        </a>
+        <a class="source" href="https://northern-road.ceri.go.jp/navi/eng/index.htm" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 18c4-2 10 2 14 0M6 14h12M7 10h10M9 6h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>Northern Road Navi</strong>北海道道路、天气和驾驶辅助信息。</span>
+        </a>
+        <a class="source" href="https://www.e-nexco.co.jp/en/pressroom/hokkaido/2024/0926/00014184.html" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v18M7 21l1.5-7h7L17 21M8 14 5 5M16 14l3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>E-NEXCO 北海道冬季提醒</strong>10 月起关注初雪、结冰和高速路况。</span>
+        </a>
+        <a class="source" href="https://hoshinoresorts.com/en/hotels/kaiporoto/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 19h16M6 19V9l6-4 6 4v10M9 19v-6h6v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>星野集团 界 ポロト</strong>白老湖畔温泉酒店，安排 10/16 晚入住。</span>
+        </a>
+        <a class="source" href="https://wwwnc.cdc.gov/travel/page/pregnant-travelers" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s-7-4.7-7-10.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 16.3 12 21 12 21Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>CDC：孕期旅行</strong>长途旅行、补水、活动和健康风险建议。</span>
+        </a>
+        <a class="source" href="https://www.nhtsa.gov/sites/nhtsa.gov/files/documents/pregnant-seat-belt-use.pdf" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 4h8v16H8V4ZM8 8h8M8 16h8" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>NHTSA：孕妇安全带</strong>车内安全带位置和安全气囊建议。</span>
+        </a>
+        <a class="source" href="https://www.hokkaido-airports.com/en/new-chitose/airport/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 11 21 4l-7 17-3-7-8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>新千岁机场</strong>核对 CTS 航班时刻、机场设施和还车时间。</span>
+        </a>
+        <a class="source" href="https://www.shanghaiairport.com/ensh/flights/index.html" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 5h16v14H4V5ZM7 9h10M7 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>上海机场航班查询</strong>核对 PVG 出发、到达、航站楼和实时变动。</span>
+        </a>
+        <a class="source" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 5c4-2 8 2 16 0v12c-8 2-12-2-16 0V5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8 8.5h8M7.5 12h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>OpenStreetMap</strong>页面真实底图来源与版权说明。</span>
+        </a>
+        <a class="source" href="https://project-osrm.org/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 17c4-5 6-5 9-2s5 2 5 2M7 7h.01M17 7h.01M7 7c2 5 8 5 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>OSRM</strong>页面绿色折线和分段驾驶时间的道路路线计算来源。</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="updates">
+      <div class="section-head">
+        <h2>后续更新记录</h2>
+        <p class="section-note">之后所有行程调整都直接改这个 HTML 文件，并在这里留一行记录。</p>
+      </div>
+      <div class="panel update-log">
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>将「路线地图」替换为真实 OpenStreetMap 底图 + OSRM 驾车路线折线，并加入 Google Maps 整条路线入口。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>新增符合页面风格的「路线地图」：用本地 SVG 展示新千岁、旭川/美瑛、札幌、登别、白老界、函馆、千岁/苫小牧的自驾顺序。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>修复每日行程表头与 Day 1 行程重叠的问题：取消表头悬浮，并为章节跳转增加顶部缓冲。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>按要求保持 10/16 晚入住星野集团「界 ポロト」，并将出发日整体后移到 10/7：后半段改为札幌、登别、白老界 ポロト、函馆、千岁，路线更顺。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>将每日行程和相关路线标签从 D 开头缩写改为 Day 1/Day 2 格式，避免第一天被看漏。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>确认自驾证件为美国驾照 + IDP，更新驾照提醒；新增上海浦东 PVG ⇄ 新千岁 CTS 航班路线、转机备选和航班预订清单。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>新增「赏枫主线」章节：按 10 月红叶从大雪山/美瑛、层云峡、定山溪，到函馆/大沼、白老/登别的节奏梳理每日红叶重点。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>此前按要求加入一晚星野集团「界 ポロト」：Day 10 从登别短途移动到白老入住，登别改为 1 晚，界 ポロト 1 晚。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>此前按“酒店尽量少换”调整为少换酒店版：保留函馆，全程压到 6 处住宿，旭川/美瑛 4 晚、札幌 3 晚、登别 2 晚、函馆 2 晚。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-29</strong>
+          <span>创建初版：两周自驾路线，排除小樽，加入孕妇与父母舒适度、安全驾驶和预订清单。</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>当前版本为规划草案。所有航班、酒店、租车、景区开放、天气与路况需在出发前再次确认；孕期相关安排以医生建议为准。</p>
+    </footer>
+  </main>
+
+  <script>
+    const storagePrefix = "hokkaido-2026-check-";
+
+    document.querySelectorAll("input[data-check]").forEach((item) => {
+      const key = storagePrefix + item.dataset.check;
+      item.checked = localStorage.getItem(key) === "true";
+      item.addEventListener("change", () => {
+        localStorage.setItem(key, String(item.checked));
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    (() => {
+      const mapElement = document.getElementById("real-route-map");
+      const statusElement = document.getElementById("map-status");
+
+      if (!mapElement) {
+        return;
+      }
+
+      const setStatus = (message) => {
+        if (statusElement) {
+          statusElement.textContent = message;
+        }
+      };
+
+      if (!window.L) {
+        setStatus("地图依赖加载失败。可先使用右侧 Google Maps 路线入口。");
+        return;
+      }
+
+      const routeStops = [
+        { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 },
+        { name: "旭川站 / 美瑛基地", lat: 43.7644208, lng: 142.3601426 },
+        { name: "札幌站", lat: 43.0686555, lng: 141.350787 },
+        { name: "登别温泉", lat: 42.4948853, lng: 141.1436714 },
+        { name: "界 ポロト", lat: 42.5602326, lng: 141.3618307 },
+        { name: "函馆站", lat: 41.7743441, lng: 140.7262486 },
+        { name: "苫小牧站", lat: 42.6398186, lng: 141.596771 },
+        { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 }
+      ];
+
+      const markerStops = [
+        { order: "1", name: "新千岁机场 / 千岁", lat: 42.786787, lng: 141.6829598, note: "Day 1 抵达；Day 14 还车返沪。" },
+        { order: "2", name: "旭川 / 美瑛", lat: 43.7644208, lng: 142.3601426, note: "连住 4 晚，日归旭岳、层云峡和美瑛白金。" },
+        { order: "3", name: "札幌", lat: 43.0686555, lng: 141.350787, note: "连住 3 晚，城市休整与定山溪日归。" },
+        { order: "4", name: "登别温泉", lat: 42.4948853, lng: 141.1436714, note: "札幌南下后的温泉停靠。" },
+        { order: "5", name: "界 ポロト", lat: 42.5602326, lng: 141.3618307, note: "10/16 晚入住。" , kai: true },
+        { order: "6", name: "函馆", lat: 41.7743441, lng: 140.7262486, note: "经大沼公园到函馆，连住 2 晚。" },
+        { order: "7", name: "苫小牧 / 千岁", lat: 42.6398186, lng: 141.596771, note: "返程前一晚回机场圈。" }
+      ];
+
+      const map = L.map(mapElement, {
+        scrollWheelZoom: false,
+        zoomControl: true
+      }).setView([42.67, 141.45], 7);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+
+      const markerLayer = L.layerGroup().addTo(map);
+      const markerBounds = L.latLngBounds([]);
+
+      markerStops.forEach((stop) => {
+        const markerIcon = L.divIcon({
+          className: "map-marker-shell",
+          html: `<span class="map-marker${stop.kai ? " kai" : ""}">${stop.order}</span>`,
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+          popupAnchor: [0, -14]
+        });
+
+        const point = [stop.lat, stop.lng];
+        markerBounds.extend(point);
+        L.marker(point, { icon: markerIcon })
+          .bindPopup(`<strong>${stop.name}</strong><br>${stop.note}`)
+          .addTo(markerLayer);
+      });
+
+      map.fitBounds(markerBounds, { padding: [26, 26] });
+      setTimeout(() => map.invalidateSize(), 250);
+      window.addEventListener("resize", () => map.invalidateSize());
+
+      const formatKm = (meters) => String(Math.round(meters / 1000));
+      const formatDuration = (seconds) => {
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const rest = minutes % 60;
+
+        if (!hours) {
+          return `${rest}分`;
+        }
+
+        return rest ? `${hours}小时${String(rest).padStart(2, "0")}分` : `${hours}小时`;
+      };
+
+      const routeCoordinates = routeStops.map((stop) => `${stop.lng},${stop.lat}`).join(";");
+      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${routeCoordinates}?overview=full&geometries=geojson&steps=false&annotations=false`;
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 12000);
+
+      fetch(osrmUrl, { signal: controller.signal })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`OSRM HTTP ${response.status}`);
+          }
+
+          return response.json();
+        })
+        .then((data) => {
+          window.clearTimeout(timeout);
+
+          if (data.code !== "Ok" || !data.routes || !data.routes.length) {
+            throw new Error("OSRM route unavailable");
+          }
+
+          const route = data.routes[0];
+          const casing = L.geoJSON(route.geometry, {
+            style: {
+              color: "#ffffff",
+              weight: 10,
+              opacity: 0.96,
+              lineJoin: "round"
+            }
+          }).addTo(map);
+
+          const line = L.geoJSON(route.geometry, {
+            style: {
+              color: "#2f6f4e",
+              weight: 5,
+              opacity: 0.95,
+              lineJoin: "round"
+            }
+          }).addTo(map);
+
+          casing.bringToBack();
+          line.bringToFront();
+          map.fitBounds(line.getBounds(), { padding: [24, 24] });
+
+          (route.legs || []).forEach((leg, index) => {
+            const label = document.querySelector(`[data-leg-meta="${index}"]`);
+
+            if (label) {
+              label.textContent = `约 ${formatKm(leg.distance)} km / ${formatDuration(leg.duration)}`;
+            }
+          });
+
+          const summary = document.getElementById("map-summary");
+          if (summary) {
+            summary.textContent = `OSRM 估算：约 ${formatKm(route.distance)} 公里，纯驾驶约 ${formatDuration(route.duration)}。`;
+          }
+
+          setStatus("已加载真实驾车路线。实际导航请以当天 Google Maps、车机和道路公告为准。");
+        })
+        .catch(() => {
+          window.clearTimeout(timeout);
+          setStatus("OSRM 路线暂时加载失败；地图仍显示真实位置，可使用右侧 Google Maps 路线入口。");
+        });
+    })();
+  </script>
+</body>
+</html>
