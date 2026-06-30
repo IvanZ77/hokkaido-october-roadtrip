@@ -246,6 +246,10 @@
       scroll-margin-top: 86px;
     }
 
+    .version-panel[hidden] {
+      display: none;
+    }
+
     .section-head {
       display: flex;
       align-items: end;
@@ -269,6 +273,98 @@
       font-size: 14px;
     }
 
+    .version-switch {
+      margin-top: 42px;
+      scroll-margin-top: 86px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 28px rgba(23, 33, 29, 0.06);
+    }
+
+    .version-switch-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .version-switch h2 {
+      margin-bottom: 6px;
+    }
+
+    .version-switch p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .version-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #eef5ef;
+    }
+
+    .version-tab {
+      min-height: 40px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 14px;
+      background: transparent;
+      color: var(--green-dark);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .version-tab[aria-pressed="true"] {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(47, 111, 78, 0.22);
+    }
+
+    .version-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .version-card {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f7faf7;
+    }
+
+    .version-card small {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .version-card strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .version-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .route-strip {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -277,6 +373,10 @@
       background: var(--paper);
       overflow: hidden;
       margin-bottom: 16px;
+    }
+
+    .route-strip.east-route-strip {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
     .route-stop {
@@ -868,7 +968,29 @@
         gap: 8px;
       }
 
+      .version-switch-head,
+      .version-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .version-switch-head {
+        display: grid;
+      }
+
+      .version-tabs {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .version-tab {
+        flex: 1 0 auto;
+      }
+
       .route-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .route-strip.east-route-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -918,6 +1040,10 @@
       }
 
       .route-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .route-strip.east-route-strip {
         grid-template-columns: 1fr;
       }
 
@@ -1009,12 +1135,13 @@
       </div>
       <div class="nav-links">
         <a href="#flights">航班</a>
-        <a href="#route">路线</a>
-        <a href="#route-map">地图</a>
-        <a href="#momiji">赏枫</a>
-        <a href="#daily">每日行程</a>
-        <a href="#comfort">孕妇与长辈</a>
-        <a href="#checklists">清单</a>
+        <a href="#versions">版本</a>
+        <a href="#route" data-version-anchor="route">路线</a>
+        <a href="#route-map" data-version-anchor="map">地图</a>
+        <a href="#momiji" data-version-anchor="momiji">赏枫</a>
+        <a href="#daily" data-version-anchor="daily">每日行程</a>
+        <a href="#comfort" data-version-anchor="comfort">孕妇与长辈</a>
+        <a href="#checklists" data-version-anchor="checklists">清单</a>
         <a href="#sources">来源</a>
         <a href="#updates">更新记录</a>
       </div>
@@ -1027,13 +1154,13 @@
         <h1>北海道十月<span class="nowrap">自驾行程</span></h1>
         <p class="hero-copy">上海出发，夫妻二人带父母，两周慢游。路线以少换酒店为主，小樽改为神威岬晴天日归的回程短停，优先舒适车程、医疗可达、红叶窗口和山路安全。</p>
         <div class="hero-actions">
-          <a class="action primary" href="#daily">
+          <a class="action primary" href="#daily" data-version-anchor="daily">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M8 3v4M16 3v4M4 9h16M5 5h14v15H5V5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             查看每日安排
           </a>
-          <a class="action" href="#checklists">
+          <a class="action" href="#checklists" data-version-anchor="checklists">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M9 11 11 13 15.5 8.5M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -1117,7 +1244,32 @@
       </div>
     </section>
 
-    <section class="section" id="route">
+    <section class="version-switch" id="versions" aria-label="行程版本切换">
+      <div class="version-switch-head">
+        <div>
+          <h2>行程版本</h2>
+          <p>两个版本互不覆盖：道央版更舒适、保留 10/16 界 ポロト；道东版更野、更远、更像北海道自然纵深。</p>
+        </div>
+        <div class="version-tabs" role="group" aria-label="选择行程版本">
+          <button class="version-tab" type="button" data-version-button="central" aria-pressed="true">道央舒适版</button>
+          <button class="version-tab" type="button" data-version-button="east" aria-pressed="false">道东自然版</button>
+        </div>
+      </div>
+      <div class="version-cards">
+        <div class="version-card">
+          <small>当前主版本</small>
+          <strong>旭川/美瑛、札幌、登别、界 ポロト、洞爷湖</strong>
+          <span>酒店换得少，车程更稳，10/16 晚入住界 ポロト。适合孕妇和父母优先舒适。</span>
+        </div>
+        <div class="version-card">
+          <small>新增备选</small>
+          <strong>十胜、阿寒、摩周、知床、野付、霧多布、钏路湿原</strong>
+          <span>自然感更强，但总驾驶约 1089 公里；这是替代路线，不包含 10/16 晚界 ポロト。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="route" data-version-panel="central">
       <div class="section-head">
         <h2>路线概览</h2>
         <p class="section-note">少换酒店版基础上，特别加入 10/16 晚星野集团「界 ポロト」。现在取消道南长途折返，富良野放到旭川去札幌的顺路段，札幌连住期间插入神威岬 + 小樽晴天日归，后半程改为洞爷湖 2 晚和支笏湖回千岁。</p>
@@ -1133,7 +1285,7 @@
       </div>
     </section>
 
-    <section class="section" id="route-map">
+    <section class="section version-panel" id="route-map" data-version-panel="central">
       <div class="section-head">
         <h2>路线地图</h2>
         <p class="section-note">使用 OpenStreetMap 真实底图和 OSRM 驾车路线计算；每天出发仍以 Google Maps、车机导航、天气、路况和身体状态为准。</p>
@@ -1146,7 +1298,7 @@
 
         <aside class="map-legend" aria-label="真实驾车路线说明">
           <h3>真实驾车路线</h3>
-          <p id="map-summary">OSRM 估算：约 642 公里，纯驾驶约 9小时48分。</p>
+          <p id="map-summary" data-map-summary>OSRM 估算：约 642 公里，纯驾驶约 9小时48分。</p>
           <div class="map-legs">
             <div class="map-leg"><b>1</b><div><strong>新千岁机场 → 旭川/美瑛</strong><span>Day 1-2：抵达后可先住机场圈，第二天北上旭川基地。</span><em class="route-leg-meta" data-leg-meta="0">约 147 km / 2小时10分</em></div></div>
             <div class="map-leg"><b>2</b><div><strong>旭川/美瑛 → 富良野</strong><span>Day 6：退房后把富良野作为顺路半日，不再单独绕远。</span><em class="route-leg-meta" data-leg-meta="1">约 55 km / 55分</em></div></div>
@@ -1167,7 +1319,7 @@
       </div>
     </section>
 
-    <section class="section" id="momiji">
+    <section class="section version-panel" id="momiji" data-version-panel="central">
       <div class="section-head">
         <h2>赏枫主线</h2>
         <p class="section-note">10 月北海道红叶通常从大雪山等高海拔区域开始，再往札幌近郊、温泉地和道央湖区推进。当前路线按“北部山地到道央湖区”串起来，不再为了道南长途折返。</p>
@@ -1211,7 +1363,7 @@
       </div>
     </section>
 
-    <section class="section" id="daily">
+    <section class="section version-panel" id="daily" data-version-panel="central">
       <div class="section-head">
         <h2>14 天每日行程</h2>
         <p class="section-note">车程为规划估算，实际以天气、路况和当天身体状态为准。孕妇不舒服时，优先删景点、不删休息。</p>
@@ -1252,7 +1404,7 @@
               <td class="day">Day 3</td>
               <td class="date">10/09 周五</td>
               <td class="place">旭川/美瑛</td>
-              <td>美瑛拼布之路、青池、白须瀑布、四季彩之丘。以停车点和短步行为主，作为第一段红叶预热。</td>
+              <td>美瑛青池 + 白须瀑布作为固定重点，早上先去；再看拼布之路、四季彩之丘。以停车点和短步行为主，作为第一段红叶预热。</td>
               <td class="drive">约 1.5-2 小时</td>
               <td><span class="tag rest">慢游日</span></td>
               <td>青池、白须瀑布是当天红叶重点；早去人少且好停车。</td>
@@ -1361,7 +1513,7 @@
       </div>
     </section>
 
-    <section class="section two-col" id="comfort">
+    <section class="section two-col version-panel" id="comfort" data-version-panel="central">
       <div class="panel">
         <h3>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1397,7 +1549,7 @@
       </div>
     </section>
 
-    <section class="section" id="checklists">
+    <section class="section version-panel" id="checklists" data-version-panel="central">
       <div class="section-head">
         <h2>预订与准备清单</h2>
         <p class="section-note">勾选状态会保存在当前浏览器。之后补酒店名、餐厅名和航班号时，直接在这个区域更新。</p>
@@ -1480,7 +1632,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section version-panel" data-version-panel="central">
       <div class="section-head">
         <h2>餐饮方向</h2>
         <p class="section-note">以熟食、热汤、可预约和不排长队为优先。孕期不追求“必须吃到某家”。</p>
@@ -1505,6 +1657,389 @@
         <div class="food-item">
           <strong>洞爷湖/支笏湖</strong>
           <span>优先选酒店一泊二食或预约制餐厅；湖区晚餐选择少，不建议临时找店。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="east-route" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东路线概览</h2>
+        <p class="section-note">新千岁进出，按十胜、阿寒、摩周、知床、野付、霧多布、钏路湿原顺时针推进。自然密度高，但总驾驶明显增加，适合作为更进阶的备选。</p>
+      </div>
+      <div class="route-strip east-route-strip" aria-label="道东路线站点">
+        <div class="route-stop"><span>Day 1</span><strong>千岁/机场<br>1 晚</strong></div>
+        <div class="route-stop"><span>Day 2-3</span><strong>十胜/带广<br>2 晚</strong></div>
+        <div class="route-stop"><span>Day 4-5</span><strong>阿寒湖<br>2 晚</strong></div>
+        <div class="route-stop"><span>Day 6</span><strong>川汤/弟子屈<br>1 晚</strong></div>
+        <div class="route-stop"><span>Day 7-8</span><strong>知床宇登吕<br>2 晚</strong></div>
+        <div class="route-stop"><span>Day 9</span><strong>霧多布/厚岸<br>1 晚</strong></div>
+        <div class="route-stop"><span>Day 10-11</span><strong>钏路<br>2 晚</strong></div>
+        <div class="route-stop"><span>Day 12</span><strong>十胜川温泉<br>1 晚</strong></div>
+        <div class="route-stop"><span>Day 13-14</span><strong>千岁/机场<br>返程</strong></div>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="east-route-map" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东路线地图</h2>
+        <p class="section-note">这版使用真实 OpenStreetMap 底图和 OSRM 驾车路线。道东天气、海边风况、知床横断道路季节性管制都要在当天复核。</p>
+      </div>
+      <div class="map-layout">
+        <div class="map-panel">
+          <div id="east-real-route-map" class="real-route-map" role="img" aria-label="北海道道东自驾真实驾车路线地图"></div>
+          <div class="map-status" id="east-map-status">正在加载道东真实底图与 OSRM 驾车路线...</div>
+        </div>
+
+        <aside class="map-legend" aria-label="道东真实驾车路线说明">
+          <h3>道东真实驾车路线</h3>
+          <p id="east-map-summary" data-map-summary>OSRM 估算：约 1089 公里，纯驾驶约 15小时14分。</p>
+          <div class="map-legs">
+            <div class="map-leg"><b>1</b><div><strong>新千岁机场 → 十胜/带广</strong><span>Day 1-2：抵达后先住机场圈，第二天走高速到十胜。</span><em class="route-leg-meta" data-leg-indices="0">约 160 km / 1小时58分</em></div></div>
+            <div class="map-leg"><b>2</b><div><strong>带广 → オンネトー/阿寒湖</strong><span>Day 4：先看 Onneto，再入住阿寒湖温泉。</span><em class="route-leg-meta" data-leg-indices="1,2">约 129 km / 1小时41分</em></div></div>
+            <div class="map-leg"><b>3</b><div><strong>阿寒湖 → 摩周湖/屈斜路湖/川汤</strong><span>Day 6：观景点为主，晚上住川汤或弟子屈。</span><em class="route-leg-meta" data-leg-indices="3,4,5">约 90 km / 1小时15分</em></div></div>
+            <div class="map-leg"><b>4</b><div><strong>川汤 → 知床宇登吕</strong><span>Day 7：进入知床半岛，下午只做轻量停靠。</span><em class="route-leg-meta" data-leg-indices="6">约 88 km / 1小时04分</em></div></div>
+            <div class="map-leg"><b>5</b><div><strong>宇登吕 → 罗臼 → 野付半岛</strong><span>Day 9：知床横断道路开放且天气稳才走罗臼。</span><em class="route-leg-meta" data-leg-indices="7,8">约 113 km / 1小时45分</em></div></div>
+            <div class="map-leg"><b>6</b><div><strong>野付半岛 → 霧多布/厚岸</strong><span>Day 9：海岸和湿地风景好，但风大时缩短停留。</span><em class="route-leg-meta" data-leg-indices="9,10">约 142 km / 1小时59分</em></div></div>
+            <div class="map-leg"><b>7</b><div><strong>厚岸 → 钏路湿原/钏路</strong><span>Day 10：厚岸午餐后转入钏路湿原边缘。</span><em class="route-leg-meta" data-leg-indices="11,12">约 78 km / 1小时28分</em></div></div>
+            <div class="map-leg"><b>8</b><div><strong>钏路 → 十胜川温泉</strong><span>Day 12：从湿原回十胜，以温泉收尾。</span><em class="route-leg-meta" data-leg-indices="13">约 114 km / 1小时42分</em></div></div>
+            <div class="map-leg"><b>9</b><div><strong>十胜川温泉 → 新千岁机场</strong><span>Day 13：提前回机场圈，返程日不赶路。</span><em class="route-leg-meta" data-leg-indices="14">约 175 km / 2小时22分</em></div></div>
+          </div>
+          <div class="route-link-grid">
+            <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=New+Chitose+Airport&destination=New+Chitose+Airport&travelmode=driving&waypoints=Obihiro+Station%7CLake+Onneto%7CLake+Akan%7CLake+Mashu+Observatory%7CLake+Kussharo+Sunayu%7CKawayu+Onsen%7CUtoro+Onsen%7CRausu%7CNotsuke+Peninsula+Nature+Center%7CKiritappu+Cape%7CAkkeshi+Station%7CKushiro+Marsh+Hosooka+Observatory%7CKushiro+Station%7CTokachigawa+Onsen" target="_blank" rel="noreferrer">Google Maps 打开道东整条路线</a>
+            <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Utoro+Onsen&destination=Notsuke+Peninsula+Nature+Center&travelmode=driving&waypoints=Rausu" target="_blank" rel="noreferrer">天气好：宇登吕 → 罗臼 → 野付</a>
+            <a class="route-link" href="https://www.openstreetmap.org/#map=7/43.44/144.38" target="_blank" rel="noreferrer">OpenStreetMap 查看道东底图</a>
+          </div>
+          <p class="map-source-note">底图 © OpenStreetMap contributors；绿色折线由 OSRM 公共服务按住宿主线计算。知床横断道路、海边强风、夜间降温和临时封路会明显影响实际车程。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="east-momiji" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东赏枫与自然主线</h2>
+        <p class="section-note">这版不靠城市和温泉密度取胜，而是把湖、湿地、海岸、野生动物和荒凉感串起来。10 月中旬已偏冷，景点宁可少走也不要赶夜路。</p>
+      </div>
+      <div class="momiji-grid">
+        <div class="momiji-item">
+          <small>Day 2-3</small>
+          <strong>十胜平原</strong>
+          <span>带广、庭园、牧场和十胜丘陵，作为进入道东前的平缓缓冲。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 4-5</small>
+          <strong>オンネトー・阿寒湖</strong>
+          <span>Onneto 是这版的核心湖景，阿寒湖连住 2 晚，适合安排温泉和湖边散步。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 6</small>
+          <strong>摩周湖・屈斜路湖</strong>
+          <span>展望台、砂汤、川汤温泉，以短停和观景为主，不安排长徒步。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 7-8</small>
+          <strong>知床五湖</strong>
+          <span>走高架木道或短线即可。天气好看湖面倒影，风雨天改室内或海边短停。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 9</small>
+          <strong>罗臼・野付半岛</strong>
+          <span>荒凉海风、Todowara 枯木、湿地和野生动物，是这版最不“普通打卡”的一段。</span>
+        </div>
+        <div class="momiji-item">
+          <small>Day 10-11</small>
+          <strong>霧多布・厚岸・钏路湿原</strong>
+          <span>湿地、海岸、牡蛎和展望台，节奏比知床后段更适合恢复体力。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="east-daily" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东 14 天每日行程</h2>
+        <p class="section-note">这版保持上海浦东 PVG ⇄ 新千岁 CTS，同样 Day 1/Day 14 不安排长途。它是替代版本，不包含 10/16 界 ポロト。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>天数</th>
+              <th>日期</th>
+              <th>住宿</th>
+              <th>路线与安排</th>
+              <th>驾驶</th>
+              <th>节奏</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day">Day 1</td>
+              <td class="date">10/07 周三</td>
+              <td class="place">千岁/机场</td>
+              <td>上海浦东 PVG 飞新千岁 CTS。落地取车后只住机场圈，买水、零食和车内用品。</td>
+              <td class="drive">约 15-30 分钟</td>
+              <td><span class="tag rest">抵达日</span></td>
+              <td>道东版更远，第一天更不能长途开。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 2</td>
+              <td class="date">10/08 周四</td>
+              <td class="place">十胜/带广</td>
+              <td>新千岁出发去带广/十胜。下午入住后只安排六花之森、真锅庭园或市区晚餐择一。</td>
+              <td class="drive">约 160 km / 2 小时</td>
+              <td><span class="tag">移动日</span></td>
+              <td>带广或十胜川附近连住 2 晚，先适应道东车距。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 3</td>
+              <td class="date">10/09 周五</td>
+              <td class="place">十胜/带广</td>
+              <td>十胜慢游日：庭园、牧场展望台、甜点店或温泉择二，不做长距离折返。</td>
+              <td class="drive">短途 0.5-1.5 小时</td>
+              <td><span class="tag rest">慢游日</span></td>
+              <td>给父母和孕期身体留缓冲，别把这天排满。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 4</td>
+              <td class="date">10/10 周六</td>
+              <td class="place">阿寒湖温泉</td>
+              <td>带广出发，经足寄方向前往 オンネトー。湖边短停看秋色和湖面颜色，再入住阿寒湖温泉。</td>
+              <td class="drive">约 130 km / 1小时40分</td>
+              <td><span class="tag warn">山路日</span></td>
+              <td>Onneto 路窄且冷，停留以短步行为主；天黑前到酒店。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 5</td>
+              <td class="date">10/11 周日</td>
+              <td class="place">阿寒湖温泉</td>
+              <td>阿寒湖休整日。湖畔散步、温泉、Ainu Kotan 或游船择一；若 Day 4 天气差，可早上补 Onneto。</td>
+              <td class="drive">短途 0-1 小时</td>
+              <td><span class="tag rest">温泉休整</span></td>
+              <td>这天是道东版的体力保险，不建议取消。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 6</td>
+              <td class="date">10/12 周一</td>
+              <td class="place">川汤/弟子屈</td>
+              <td>阿寒湖出发，走摩周湖第一展望台、屈斜路湖砂汤，傍晚住川汤温泉或弟子屈。</td>
+              <td class="drive">约 90 km / 1小时15分纯驾驶</td>
+              <td><span class="tag">湖区移动</span></td>
+              <td>摩周湖能见度看运气；雾大就别久等，直接去屈斜路湖。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 7</td>
+              <td class="date">10/13 周二</td>
+              <td class="place">知床宇登吕</td>
+              <td>川汤/弟子屈出发去知床宇登吕。下午看 Oshinkoshin 瀑布、夕阳台或海边短停。</td>
+              <td class="drive">约 88 km / 1小时05分</td>
+              <td><span class="tag">移动日</span></td>
+              <td>宇登吕连住 2 晚，减少知床段换酒店压力。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 8</td>
+              <td class="date">10/14 周三</td>
+              <td class="place">知床宇登吕</td>
+              <td>知床五湖为主。优先高架木道或短线，天气好再加知床自然中心；下午早回酒店。</td>
+              <td class="drive">短途 0.5-1.5 小时</td>
+              <td><span class="tag warn">自然日</span></td>
+              <td>不安排长徒步；留意熊活动、步道规则和当天开放状态。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 9</td>
+              <td class="date">10/15 周四</td>
+              <td class="place">霧多布/厚岸</td>
+              <td>天气好且知床横断道路开放：宇登吕经罗臼到野付半岛，再南下霧多布/厚岸。天气差则改内陆绕行并删罗臼。</td>
+              <td class="drive">约 255 km / 4小时以内纯驾驶</td>
+              <td><span class="tag warn">长移动</span></td>
+              <td>这是全程最需要看天气的一天；不追求每个点都停。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 10</td>
+              <td class="date">10/16 周五</td>
+              <td class="place">钏路</td>
+              <td>霧多布湿原或岬角短停，厚岸吃熟食牡蛎/定食，下午去钏路入住。</td>
+              <td class="drive">约 80-120 km / 1.5-2.5 小时</td>
+              <td><span class="tag rest">恢复日</span></td>
+              <td>道东版这晚不住界 ポロト；想保留界需要另排版本。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 11</td>
+              <td class="date">10/17 周六</td>
+              <td class="place">钏路</td>
+              <td>钏路湿原一日：细冈展望台、温根内木道或丹顶鹤相关设施择二。晚上回钏路吃热食。</td>
+              <td class="drive">约 1-2 小时</td>
+              <td><span class="tag rest">湿原慢游</span></td>
+              <td>木道湿滑时缩短步行，优先展望台和室内设施。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 12</td>
+              <td class="date">10/18 周日</td>
+              <td class="place">十胜川温泉</td>
+              <td>钏路退房回十胜川温泉。下午入住，泡植物性褐色温泉，作为长线收尾休息。</td>
+              <td class="drive">约 114 km / 1小时42分</td>
+              <td><span class="tag rest">温泉收尾</span></td>
+              <td>建议订一泊二食，减少晚上再开车找餐厅。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 13</td>
+              <td class="date">10/19 周一</td>
+              <td class="place">千岁/机场</td>
+              <td>十胜川温泉退房后回千岁/机场圈。途中只安排服务区和简单午餐，晚上整理行李。</td>
+              <td class="drive">约 175 km / 2小时22分</td>
+              <td><span class="tag">返程前移动</span></td>
+              <td>国际航班前一天回机场圈，避免道东长距离赶机。</td>
+            </tr>
+            <tr>
+              <td class="day">Day 14</td>
+              <td class="date">10/20 周二</td>
+              <td class="place">返程</td>
+              <td>新千岁 CTS 还车，机场购物和午餐，飞回上海浦东 PVG。</td>
+              <td class="drive">约 15-45 分钟</td>
+              <td><span class="tag rest">返程日</span></td>
+              <td>还车前加满油，预留排队、航站楼和行李时间。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section two-col version-panel" id="east-comfort" data-version-panel="east" hidden>
+      <div class="panel">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s-7-4.7-7-10.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 16.3 12 21 12 21Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          道东版舒适原则
+        </h3>
+        <ul class="list">
+          <li>住宿换得比道央版多，但尽量保留十胜 2 晚、阿寒 2 晚、宇登吕 2 晚、钏路 2 晚。</li>
+          <li>Day 9 是全程关键长移动日，天气差就删罗臼和部分野付停留，不硬扛。</li>
+          <li>知床、野付、霧多布海风强，孕妇和父母都要以短步行、早回酒店为准。</li>
+          <li>这版不安排 10/16 界 ポロト，避免从道东硬折返白老。</li>
+          <li>每天白天驾驶，尽量 16:30 前到达当晚住宿区域。</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 14h16M6 14l2-6h8l2 6M7 14v4M17 14v4M8 18h0M16 18h0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          道东自驾重点
+        </h3>
+        <ul class="list">
+          <li>租 7 座 MPV 仍然适合，但要确认冬胎、ETC、道路救援和异地山区救援范围。</li>
+          <li>每天查知床横断道路、Northern Road Navi、天气和海边风况。</li>
+          <li>加油站密度比道央低，半箱油就补，不等到油灯亮。</li>
+          <li>准备离线地图；山区和海岸线手机信号可能不稳定。</li>
+          <li>野生动物多，黄昏和清晨降低速度，不安排夜间赶路。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section version-panel" id="east-checklists" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东预订与准备清单</h2>
+        <p class="section-note">勾选状态同样保存在当前浏览器。道东版比道央版更依赖天气窗口和道路开放。</p>
+      </div>
+      <div class="check-grid">
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 20V7l7-4 7 4v13H5ZM9 20v-7h6v7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            酒店
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="east-hotel-chitose">千岁/机场 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-tokachi">十胜/带广 2 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-akan">阿寒湖温泉 2 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-kawayu">川汤/弟子屈 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-utoro">知床宇登吕 2 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-akkeshi">霧多布/厚岸 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-kushiro">钏路 2 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-tokachigawa">十胜川温泉 1 晚</label>
+            <label class="check"><input type="checkbox" data-check="east-hotel-return">千岁/机场 1 晚</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 11 21 4l-7 17-3-7-8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            航班
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="east-flight-outbound">Day 1 PVG → CTS 去程航班</label>
+            <label class="check"><input type="checkbox" data-check="east-flight-return">Day 14 CTS → PVG 返程航班</label>
+            <label class="check"><input type="checkbox" data-check="east-flight-arrival">Day 1 抵达后只短途住机场圈</label>
+            <label class="check"><input type="checkbox" data-check="east-flight-buffer">Day 13 提前回千岁/机场圈</label>
+            <label class="check"><input type="checkbox" data-check="east-flight-baggage">核对托运行李、孕期乘机文件和座位</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 16h14l-1.5-4.5A2.2 2.2 0 0 0 15.4 10H8.6a2.2 2.2 0 0 0-2.1 1.5L5 16ZM7 16v3M17 16v3M8 19h0M16 19h0M9 10l1.2-4h3.6L15 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            租车与道路
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="east-car-license">美国驾照、IDP、护照原件</label>
+            <label class="check"><input type="checkbox" data-check="east-car-mpv">预订 7 座 MPV，确认行李空间</label>
+            <label class="check"><input type="checkbox" data-check="east-car-winter-tires">确认 10 月可配冬胎</label>
+            <label class="check"><input type="checkbox" data-check="east-car-etc">ETC 卡或高速通行方案</label>
+            <label class="check"><input type="checkbox" data-check="east-car-fuel">标记阿寒、知床、根室、钏路补油点</label>
+            <label class="check"><input type="checkbox" data-check="east-car-shiretoko-road">每天核对知床横断道路开闭</label>
+            <label class="check"><input type="checkbox" data-check="east-car-offline-map">Google Maps/车机/离线地图都准备</label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 3v8M11 3v8M9 11v10M16 3c1.8 1.2 2.8 3 2.8 5.2S17.7 12 16 13v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            健康与装备
+          </h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check="east-health-doctor">孕期出行前咨询产检医生</label>
+            <label class="check"><input type="checkbox" data-check="east-health-insurance">旅行保险覆盖孕期、自驾和道东医疗</label>
+            <label class="check"><input type="checkbox" data-check="east-health-hospitals">保存带广、钏路、网走/斜里医院信息</label>
+            <label class="check"><input type="checkbox" data-check="east-health-wind">防风保暖层、帽子、围巾和防滑鞋</label>
+            <label class="check"><input type="checkbox" data-check="east-health-car">车内水、热饮、零食、毛毯和垃圾袋</label>
+            <label class="check"><input type="checkbox" data-check="east-health-walks">湿地木道和知床步道按体力随时缩短</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section version-panel" data-version-panel="east" hidden>
+      <div class="section-head">
+        <h2>道东餐饮方向</h2>
+        <p class="section-note">道东餐厅选择更分散，晚餐尽量靠酒店或提前预约。孕期仍以熟食和热食为优先。</p>
+      </div>
+      <div class="food-grid">
+        <div class="food-item">
+          <strong>十胜/带广</strong>
+          <span>豚丼、甜点、乳制品、咖啡馆。选择熟食和易停车餐厅。</span>
+        </div>
+        <div class="food-item">
+          <strong>阿寒湖/川汤</strong>
+          <span>优先温泉酒店一泊二食，减少晚上山路找餐厅。</span>
+        </div>
+        <div class="food-item">
+          <strong>知床宇登吕</strong>
+          <span>酒店晚餐更稳；海鲜以熟鱼、烤物、锅物为主。</span>
+        </div>
+        <div class="food-item">
+          <strong>厚岸/钏路</strong>
+          <span>牡蛎选择熟食，钏路安排炉端烧、汤咖喱或定食。</span>
+        </div>
+        <div class="food-item">
+          <strong>十胜川温泉</strong>
+          <span>作为最后温泉夜，建议订含晚餐的住宿。</span>
         </div>
       </div>
     </section>
@@ -1546,6 +2081,30 @@
             <path d="M4 16c4-4 7-4 10 0s4 3 6 1M5 11c3-3 5-3 8 0s5 3 6 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
           <span><strong>美瑛官方旅游</strong>核对青池、白须瀑布、田园路和停车信息。</span>
+        </a>
+        <a class="source" href="https://www.env.go.jp/en/nature/nps/park/akan/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 16c3-2 5 2 8 0s5-2 8 0M6 11c3-2 4 1 6-1s5-2 7 0M8 7h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>阿寒摩周国立公园</strong>核对阿寒湖、オンネトー、摩周湖和屈斜路湖信息。</span>
+        </a>
+        <a class="source" href="https://www.goko.go.jp/multilingual_eng/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 18 9 7l4 6 2-3 5 8H4ZM7 18c3-2 7-2 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span><strong>知床五湖官方</strong>核对高架木道、地上步道、熊活动和开放状态。</span>
+        </a>
+        <a class="source" href="https://www.visit-hokkaido.jp/en/spot/detail_10494.html" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 17c4-3 8-3 12-1 2 1 3 1 4 0M5 12c4-2 7-2 10 0M8 7h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>北海道官方：野付半岛</strong>核对 Todowara、湿地、风况和自然中心信息。</span>
+        </a>
+        <a class="source" href="https://www.env.go.jp/en/nature/nps/park/kushiro/" target="_blank" rel="noreferrer">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 17c5-3 7 2 12-1 2-1 3-1 4 0M6 12c4-2 8 1 12-1M8 7c3 0 5 1 8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span><strong>钏路湿原国立公园</strong>核对湿原展望台、木道、天气和自然保护信息。</span>
         </a>
         <a class="source" href="https://www.laketoya.com/en/" target="_blank" rel="noreferrer">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1643,6 +2202,10 @@
       <div class="panel update-log">
         <div class="update-row">
           <strong>2026-06-30</strong>
+          <span>新增可切换的「道东自然版」：新千岁、十胜/带广、阿寒湖/オンネトー、摩周湖/屈斜路湖、知床宇登吕、罗臼/野付半岛、霧多布/厚岸、钏路湿原、十胜川温泉、新千岁；同时强化道央版 Day 3 美瑛青池 + 白须瀑布为固定重点。</span>
+        </div>
+        <div class="update-row">
+          <strong>2026-06-30</strong>
           <span>在札幌连住期间插入 Day 7「神威岬 + 小樽」晴天限定日归：晴朗且步道开放时执行，阴雨大风则改札幌市内或与 Day 8 定山溪互换。</span>
         </div>
         <div class="update-row">
@@ -1715,80 +2278,6 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     (() => {
-      const mapElement = document.getElementById("real-route-map");
-      const statusElement = document.getElementById("map-status");
-
-      if (!mapElement) {
-        return;
-      }
-
-      const setStatus = (message) => {
-        if (statusElement) {
-          statusElement.textContent = message;
-        }
-      };
-
-      if (!window.L) {
-        setStatus("地图依赖加载失败。可先使用右侧 Google Maps 路线入口。");
-        return;
-      }
-
-      const routeStops = [
-        { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 },
-        { name: "旭川站 / 美瑛基地", lat: 43.7644208, lng: 142.3601426 },
-        { name: "富良野站", lat: 43.3469008, lng: 142.3916593 },
-        { name: "札幌站", lat: 43.0686555, lng: 141.350787 },
-        { name: "登别温泉", lat: 42.4948853, lng: 141.1436714 },
-        { name: "界 ポロト", lat: 42.5602326, lng: 141.3618307 },
-        { name: "洞爷湖温泉", lat: 42.563588, lng: 140.817795 },
-        { name: "支笏湖温泉", lat: 42.778595, lng: 141.397802 },
-        { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 }
-      ];
-
-      const markerStops = [
-        { order: "1", name: "新千岁机场 / 千岁", lat: 42.786787, lng: 141.6829598, note: "Day 1 抵达；Day 14 还车返沪。" },
-        { order: "2", name: "旭川 / 美瑛", lat: 43.7644208, lng: 142.3601426, note: "连住 4 晚，日归旭岳、层云峡和美瑛白金。" },
-        { order: "3", name: "富良野", lat: 43.3469008, lng: 142.3916593, note: "Day 6 顺路半日，不单独增加住宿。" },
-        { order: "4", name: "札幌", lat: 43.0686555, lng: 141.350787, note: "连住 3 晚，城市休整与定山溪日归。" },
-        { order: "5", name: "登别温泉", lat: 42.4948853, lng: 141.1436714, note: "札幌南下后的温泉停靠。" },
-        { order: "6", name: "界 ポロト", lat: 42.5602326, lng: 141.3618307, note: "10/16 晚入住。", kai: true },
-        { order: "7", name: "洞爷湖温泉", lat: 42.563588, lng: 140.817795, note: "连住 2 晚，湖畔与温泉慢游。" },
-        { order: "8", name: "支笏湖温泉", lat: 42.778595, lng: 141.397802, note: "Day 13 顺路短停后回千岁。" }
-      ];
-
-      const map = L.map(mapElement, {
-        scrollWheelZoom: false,
-        zoomControl: true
-      }).setView([42.67, 141.45], 7);
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 18,
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(map);
-
-      const markerLayer = L.layerGroup().addTo(map);
-      const markerBounds = L.latLngBounds([]);
-
-      markerStops.forEach((stop) => {
-        const markerIcon = L.divIcon({
-          className: "map-marker-shell",
-          html: `<span class="map-marker${stop.kai ? " kai" : ""}">${stop.order}</span>`,
-          iconSize: [30, 30],
-          iconAnchor: [15, 15],
-          popupAnchor: [0, -14]
-        });
-
-        const point = [stop.lat, stop.lng];
-        markerBounds.extend(point);
-        L.marker(point, { icon: markerIcon })
-          .bindPopup(`<strong>${stop.name}</strong><br>${stop.note}`)
-          .addTo(markerLayer);
-      });
-
-      map.fitBounds(markerBounds, { padding: [26, 26] });
-      setTimeout(() => map.invalidateSize(), 250);
-      window.addEventListener("resize", () => map.invalidateSize());
-
       const formatKm = (meters) => String(Math.round(meters / 1000));
       const formatDuration = (seconds) => {
         const minutes = Math.round(seconds / 60);
@@ -1802,68 +2291,307 @@
         return rest ? `${hours}小时${String(rest).padStart(2, "0")}分` : `${hours}小时`;
       };
 
-      const routeCoordinates = routeStops.map((stop) => `${stop.lng},${stop.lat}`).join(";");
-      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${routeCoordinates}?overview=full&geometries=geojson&steps=false&annotations=false`;
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 12000);
+      const routeConfigs = {
+        central: {
+          sectionId: "route-map",
+          mapId: "real-route-map",
+          statusId: "map-status",
+          center: [42.67, 141.45],
+          zoom: 7,
+          routeStops: [
+            { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 },
+            { name: "旭川站 / 美瑛基地", lat: 43.7644208, lng: 142.3601426 },
+            { name: "富良野站", lat: 43.3469008, lng: 142.3916593 },
+            { name: "札幌站", lat: 43.0686555, lng: 141.350787 },
+            { name: "登别温泉", lat: 42.4948853, lng: 141.1436714 },
+            { name: "界 ポロト", lat: 42.5602326, lng: 141.3618307 },
+            { name: "洞爷湖温泉", lat: 42.563588, lng: 140.817795 },
+            { name: "支笏湖温泉", lat: 42.778595, lng: 141.397802 },
+            { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 }
+          ],
+          markerStops: [
+            { order: "1", name: "新千岁机场 / 千岁", lat: 42.786787, lng: 141.6829598, note: "Day 1 抵达；Day 14 还车返沪。" },
+            { order: "2", name: "旭川 / 美瑛", lat: 43.7644208, lng: 142.3601426, note: "连住 4 晚，日归旭岳、层云峡和美瑛白金。" },
+            { order: "3", name: "富良野", lat: 43.3469008, lng: 142.3916593, note: "Day 6 顺路半日，不单独增加住宿。" },
+            { order: "4", name: "札幌", lat: 43.0686555, lng: 141.350787, note: "连住 3 晚，城市休整与定山溪日归。" },
+            { order: "5", name: "登别温泉", lat: 42.4948853, lng: 141.1436714, note: "札幌南下后的温泉停靠。" },
+            { order: "6", name: "界 ポロト", lat: 42.5602326, lng: 141.3618307, note: "10/16 晚入住。", kai: true },
+            { order: "7", name: "洞爷湖温泉", lat: 42.563588, lng: 140.817795, note: "连住 2 晚，湖畔与温泉慢游。" },
+            { order: "8", name: "支笏湖温泉", lat: 42.778595, lng: 141.397802, note: "Day 13 顺路短停后回千岁。" }
+          ]
+        },
+        east: {
+          sectionId: "east-route-map",
+          mapId: "east-real-route-map",
+          statusId: "east-map-status",
+          center: [43.4, 144.2],
+          zoom: 7,
+          routeStops: [
+            { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 },
+            { name: "带广站", lat: 42.9181018, lng: 143.2020215 },
+            { name: "オンネトー", lat: 43.3846084, lng: 143.9681822 },
+            { name: "阿寒湖温泉", lat: 43.4347086, lng: 144.0872453 },
+            { name: "摩周湖第一展望台", lat: 43.557, lng: 144.5074212 },
+            { name: "屈斜路湖砂汤", lat: 43.6238871, lng: 144.3595574 },
+            { name: "川汤温泉", lat: 43.6163708, lng: 144.4579851 },
+            { name: "知床宇登吕", lat: 44.0721565, lng: 144.9986511 },
+            { name: "罗臼", lat: 44.0218752, lng: 145.1897435 },
+            { name: "野付半岛自然中心", lat: 43.5903534, lng: 145.3349046 },
+            { name: "霧多布岬", lat: 43.076033, lng: 145.172647 },
+            { name: "厚岸站", lat: 43.0560395, lng: 144.8412893 },
+            { name: "钏路湿原细冈展望台", lat: 43.098177, lng: 144.44922 },
+            { name: "钏路站", lat: 42.9904564, lng: 144.3820311 },
+            { name: "十胜川温泉", lat: 42.9329621, lng: 143.2961483 },
+            { name: "新千岁机场", lat: 42.786787, lng: 141.6829598 }
+          ],
+          markerStops: [
+            { order: "1", name: "新千岁机场 / 千岁", lat: 42.786787, lng: 141.6829598, note: "Day 1 抵达；Day 13-14 回机场圈。" },
+            { order: "2", name: "十胜 / 带广", lat: 42.9181018, lng: 143.2020215, note: "连住 2 晚，庭园、甜点和十胜平原。" },
+            { order: "3", name: "オンネトー / 阿寒湖", lat: 43.3846084, lng: 143.9681822, note: "Day 4-5 的核心湖景和温泉。" },
+            { order: "4", name: "摩周湖 / 屈斜路湖", lat: 43.557, lng: 144.5074212, note: "Day 6 展望台、砂汤和川汤温泉。" },
+            { order: "5", name: "知床宇登吕", lat: 44.0721565, lng: 144.9986511, note: "连住 2 晚，知床五湖和海边短停。" },
+            { order: "6", name: "罗臼 / 野付半岛", lat: 43.5903534, lng: 145.3349046, note: "天气好走知床横断道路，野付看湿地和 Todowara。" },
+            { order: "7", name: "霧多布 / 厚岸", lat: 43.076033, lng: 145.172647, note: "海岸湿地、岬角和厚岸熟食牡蛎。" },
+            { order: "8", name: "钏路湿原 / 钏路", lat: 43.098177, lng: 144.44922, note: "连住 2 晚，展望台、木道和城市补给。" },
+            { order: "9", name: "十胜川温泉", lat: 42.9329621, lng: 143.2961483, note: "Day 12 温泉收尾后回千岁。" }
+          ]
+        }
+      };
 
-      fetch(osrmUrl, { signal: controller.signal })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`OSRM HTTP ${response.status}`);
+      const anchorsByVersion = {
+        central: {
+          route: "#route",
+          map: "#route-map",
+          momiji: "#momiji",
+          daily: "#daily",
+          comfort: "#comfort",
+          checklists: "#checklists"
+        },
+        east: {
+          route: "#east-route",
+          map: "#east-route-map",
+          momiji: "#east-momiji",
+          daily: "#east-daily",
+          comfort: "#east-comfort",
+          checklists: "#east-checklists"
+        }
+      };
+
+      const mapStates = {};
+
+      const setStatus = (config, message) => {
+        const statusElement = document.getElementById(config.statusId);
+        if (statusElement) {
+          statusElement.textContent = message;
+        }
+      };
+
+      const parseLegIndices = (value) => value.split(",").flatMap((part) => {
+        const trimmed = part.trim();
+        if (!trimmed) {
+          return [];
+        }
+
+        if (trimmed.includes("-")) {
+          const [start, end] = trimmed.split("-").map((entry) => Number(entry.trim()));
+          if (Number.isNaN(start) || Number.isNaN(end) || end < start) {
+            return [];
           }
 
-          return response.json();
-        })
-        .then((data) => {
-          window.clearTimeout(timeout);
+          return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+        }
 
-          if (data.code !== "Ok" || !data.routes || !data.routes.length) {
-            throw new Error("OSRM route unavailable");
+        const index = Number(trimmed);
+        return Number.isNaN(index) ? [] : [index];
+      });
+
+      const updateLegLabels = (section, route) => {
+        const legs = route.legs || [];
+
+        section.querySelectorAll("[data-leg-meta]").forEach((label) => {
+          const index = Number(label.dataset.legMeta);
+          const leg = legs[index];
+          if (leg) {
+            label.textContent = `约 ${formatKm(leg.distance)} km / ${formatDuration(leg.duration)}`;
           }
+        });
 
-          const route = data.routes[0];
-          const casing = L.geoJSON(route.geometry, {
-            style: {
-              color: "#ffffff",
-              weight: 10,
-              opacity: 0.96,
-              lineJoin: "round"
+        section.querySelectorAll("[data-leg-indices]").forEach((label) => {
+          const indices = parseLegIndices(label.dataset.legIndices);
+          const totals = indices.reduce((sum, index) => {
+            const leg = legs[index];
+            if (!leg) {
+              return sum;
             }
-          }).addTo(map);
 
-          const line = L.geoJSON(route.geometry, {
-            style: {
-              color: "#2f6f4e",
-              weight: 5,
-              opacity: 0.95,
-              lineJoin: "round"
+            return {
+              distance: sum.distance + leg.distance,
+              duration: sum.duration + leg.duration
+            };
+          }, { distance: 0, duration: 0 });
+
+          if (totals.distance > 0) {
+            label.textContent = `约 ${formatKm(totals.distance)} km / ${formatDuration(totals.duration)}`;
+          }
+        });
+
+        const summary = section.querySelector("[data-map-summary]");
+        if (summary) {
+          summary.textContent = `OSRM 估算：约 ${formatKm(route.distance)} 公里，纯驾驶约 ${formatDuration(route.duration)}。`;
+        }
+      };
+
+      const initRouteMap = (version) => {
+        const config = routeConfigs[version];
+        if (!config) {
+          return;
+        }
+
+        const section = document.getElementById(config.sectionId);
+        const mapElement = document.getElementById(config.mapId);
+        if (!section || !mapElement) {
+          return;
+        }
+
+        if (!window.L) {
+          setStatus(config, "地图依赖加载失败。可先使用右侧 Google Maps 路线入口。");
+          return;
+        }
+
+        if (mapStates[version]) {
+          const state = mapStates[version];
+          window.setTimeout(() => {
+            state.map.invalidateSize();
+            if (state.bounds) {
+              state.map.fitBounds(state.bounds, { padding: [24, 24] });
             }
-          }).addTo(map);
+          }, 120);
+          return;
+        }
 
-          casing.bringToBack();
-          line.bringToFront();
-          map.fitBounds(line.getBounds(), { padding: [24, 24] });
+        const map = L.map(mapElement, {
+          scrollWheelZoom: false,
+          zoomControl: true
+        }).setView(config.center, config.zoom);
 
-          (route.legs || []).forEach((leg, index) => {
-            const label = document.querySelector(`[data-leg-meta="${index}"]`);
+        mapStates[version] = { map, bounds: null };
 
-            if (label) {
-              label.textContent = `约 ${formatKm(leg.distance)} km / ${formatDuration(leg.duration)}`;
-            }
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+
+        const markerLayer = L.layerGroup().addTo(map);
+        const markerBounds = L.latLngBounds([]);
+
+        config.markerStops.forEach((stop) => {
+          const markerIcon = L.divIcon({
+            className: "map-marker-shell",
+            html: `<span class="map-marker${stop.kai ? " kai" : ""}">${stop.order}</span>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -14]
           });
 
-          const summary = document.getElementById("map-summary");
-          if (summary) {
-            summary.textContent = `OSRM 估算：约 ${formatKm(route.distance)} 公里，纯驾驶约 ${formatDuration(route.duration)}。`;
-          }
-
-          setStatus("已加载真实驾车路线。实际导航请以当天 Google Maps、车机和道路公告为准。");
-        })
-        .catch(() => {
-          window.clearTimeout(timeout);
-          setStatus("OSRM 路线暂时加载失败；地图仍显示真实位置，可使用右侧 Google Maps 路线入口。");
+          const point = [stop.lat, stop.lng];
+          markerBounds.extend(point);
+          L.marker(point, { icon: markerIcon })
+            .bindPopup(`<strong>${stop.name}</strong><br>${stop.note}`)
+            .addTo(markerLayer);
         });
+
+        map.fitBounds(markerBounds, { padding: [26, 26] });
+        window.setTimeout(() => map.invalidateSize(), 250);
+
+        const routeCoordinates = config.routeStops.map((stop) => `${stop.lng},${stop.lat}`).join(";");
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${routeCoordinates}?overview=full&geometries=geojson&steps=false&annotations=false`;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 12000);
+
+        fetch(osrmUrl, { signal: controller.signal })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`OSRM HTTP ${response.status}`);
+            }
+
+            return response.json();
+          })
+          .then((data) => {
+            window.clearTimeout(timeout);
+
+            if (data.code !== "Ok" || !data.routes || !data.routes.length) {
+              throw new Error("OSRM route unavailable");
+            }
+
+            const route = data.routes[0];
+            const casing = L.geoJSON(route.geometry, {
+              style: {
+                color: "#ffffff",
+                weight: 10,
+                opacity: 0.96,
+                lineJoin: "round"
+              }
+            }).addTo(map);
+
+            const line = L.geoJSON(route.geometry, {
+              style: {
+                color: "#2f6f4e",
+                weight: 5,
+                opacity: 0.95,
+                lineJoin: "round"
+              }
+            }).addTo(map);
+
+            casing.bringToBack();
+            line.bringToFront();
+            mapStates[version].bounds = line.getBounds();
+            map.fitBounds(mapStates[version].bounds, { padding: [24, 24] });
+            updateLegLabels(section, route);
+            setStatus(config, "已加载真实驾车路线。实际导航请以当天 Google Maps、车机和道路公告为准。");
+          })
+          .catch(() => {
+            window.clearTimeout(timeout);
+            setStatus(config, "OSRM 路线暂时加载失败；地图仍显示真实位置，可使用右侧 Google Maps 路线入口。");
+          });
+      };
+
+      const setVersion = (version) => {
+        const activeVersion = version === "east" ? "east" : "central";
+        document.body.dataset.activeVersion = activeVersion;
+
+        document.querySelectorAll("[data-version-panel]").forEach((panel) => {
+          panel.hidden = panel.dataset.versionPanel !== activeVersion;
+        });
+
+        document.querySelectorAll("[data-version-button]").forEach((button) => {
+          const isActive = button.dataset.versionButton === activeVersion;
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        const anchors = anchorsByVersion[activeVersion];
+        document.querySelectorAll("[data-version-anchor]").forEach((link) => {
+          const key = link.dataset.versionAnchor;
+          if (anchors[key]) {
+            link.setAttribute("href", anchors[key]);
+          }
+        });
+
+        localStorage.setItem("hokkaido-trip-version", activeVersion);
+        window.setTimeout(() => initRouteMap(activeVersion), 80);
+      };
+
+      document.querySelectorAll("[data-version-button]").forEach((button) => {
+        button.addEventListener("click", () => setVersion(button.dataset.versionButton));
+      });
+
+      window.addEventListener("resize", () => {
+        Object.values(mapStates).forEach((state) => state.map.invalidateSize());
+      });
+
+      const hash = window.location.hash.replace("#", "");
+      const hashVersion = hash.startsWith("east-") ? "east" : "";
+      const savedVersion = localStorage.getItem("hokkaido-trip-version");
+      setVersion(hashVersion || savedVersion || "central");
     })();
   </script>
 </body>
